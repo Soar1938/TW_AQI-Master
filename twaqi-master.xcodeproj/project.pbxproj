@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D02C69122D7835E0095393F /* Aqi_List+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C68F22D7835E0095393F /* Aqi_List+CoreDataClass.swift */; };
+		5D02C69222D7835E0095393F /* Aqi_List+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C69022D7835E0095393F /* Aqi_List+CoreDataProperties.swift */; };
+		5D02C69622D784D80095393F /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C69522D784D80095393F /* CoreDataStack.swift */; };
+		5D02C69922D789760095393F /* twaqi_master.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C69722D789760095393F /* twaqi_master.xcdatamodeld */; };
 		5D91521E22D0FE81009EA4D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91521D22D0FE81009EA4D7 /* AppDelegate.swift */; };
 		5D91522022D0FE81009EA4D7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91521F22D0FE81009EA4D7 /* ViewController.swift */; };
 		5D91522322D0FE81009EA4D7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D91522122D0FE81009EA4D7 /* Main.storyboard */; };
@@ -16,11 +20,14 @@
 		5D91523522D11642009EA4D7 /* aqiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91523422D11642009EA4D7 /* aqiData.swift */; };
 		5D91523922D1CB3E009EA4D7 /* aqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D91523822D1CB3E009EA4D7 /* aqi@2x.png */; };
 		5D91523B22D1D231009EA4D7 /* aqiDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91523A22D1D231009EA4D7 /* aqiDetailVC.swift */; };
-		5D91523E22D225C3009EA4D7 /* twaqi_master.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D91523C22D225C3009EA4D7 /* twaqi_master.xcdatamodeld */; };
 		5D91524022D23D63009EA4D7 /* aqiDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91523F22D23D63009EA4D7 /* aqiDetailCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D02C68F22D7835E0095393F /* Aqi_List+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Aqi_List+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5D02C69022D7835E0095393F /* Aqi_List+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Aqi_List+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5D02C69522D784D80095393F /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		5D02C69822D789760095393F /* twaqi_master.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = twaqi_master.xcdatamodel; sourceTree = "<group>"; };
 		5D91521A22D0FE81009EA4D7 /* twaqi-master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "twaqi-master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D91521D22D0FE81009EA4D7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D91521F22D0FE81009EA4D7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -32,7 +39,6 @@
 		5D91523422D11642009EA4D7 /* aqiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aqiData.swift; sourceTree = "<group>"; };
 		5D91523822D1CB3E009EA4D7 /* aqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aqi@2x.png"; sourceTree = "<group>"; };
 		5D91523A22D1D231009EA4D7 /* aqiDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aqiDetailVC.swift; sourceTree = "<group>"; };
-		5D91523D22D225C3009EA4D7 /* twaqi_master.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = twaqi_master.xcdatamodel; sourceTree = "<group>"; };
 		5D91523F22D23D63009EA4D7 /* aqiDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aqiDetailCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -47,6 +53,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D02C68B22D782BC0095393F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5D91521F22D0FE81009EA4D7 /* ViewController.swift */,
+				5D91523A22D1D231009EA4D7 /* aqiDetailVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		5D02C68C22D782BF0095393F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5D91523222D1038F009EA4D7 /* aqiTableCell.swift */,
+				5D91523F22D23D63009EA4D7 /* aqiDetailCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5D02C68D22D782C20095393F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5D02C69722D789760095393F /* twaqi_master.xcdatamodeld */,
+				5D02C68F22D7835E0095393F /* Aqi_List+CoreDataClass.swift */,
+				5D02C69022D7835E0095393F /* Aqi_List+CoreDataProperties.swift */,
+				5D02C69522D784D80095393F /* CoreDataStack.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5D02C68E22D783090095393F /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				5D91523822D1CB3E009EA4D7 /* aqi@2x.png */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
 		5D91521122D0FE81009EA4D7 = {
 			isa = PBXGroup;
 			children = (
@@ -66,18 +109,16 @@
 		5D91521C22D0FE81009EA4D7 /* twaqi-master */ = {
 			isa = PBXGroup;
 			children = (
-				5D91523822D1CB3E009EA4D7 /* aqi@2x.png */,
 				5D91523422D11642009EA4D7 /* aqiData.swift */,
 				5D91521D22D0FE81009EA4D7 /* AppDelegate.swift */,
-				5D91521F22D0FE81009EA4D7 /* ViewController.swift */,
-				5D91523A22D1D231009EA4D7 /* aqiDetailVC.swift */,
-				5D91523222D1038F009EA4D7 /* aqiTableCell.swift */,
+				5D02C68E22D783090095393F /* Image */,
+				5D02C68D22D782C20095393F /* Model */,
+				5D02C68C22D782BF0095393F /* View */,
+				5D02C68B22D782BC0095393F /* Controller */,
 				5D91522122D0FE81009EA4D7 /* Main.storyboard */,
-				5D91523F22D23D63009EA4D7 /* aqiDetailCell.swift */,
 				5D91522722D0FE82009EA4D7 /* Assets.xcassets */,
 				5D91522922D0FE82009EA4D7 /* LaunchScreen.storyboard */,
 				5D91522C22D0FE82009EA4D7 /* Info.plist */,
-				5D91523C22D225C3009EA4D7 /* twaqi_master.xcdatamodeld */,
 			);
 			path = "twaqi-master";
 			sourceTree = "<group>";
@@ -154,11 +195,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D02C69222D7835E0095393F /* Aqi_List+CoreDataProperties.swift in Sources */,
 				5D91523322D1038F009EA4D7 /* aqiTableCell.swift in Sources */,
+				5D02C69122D7835E0095393F /* Aqi_List+CoreDataClass.swift in Sources */,
 				5D91522022D0FE81009EA4D7 /* ViewController.swift in Sources */,
+				5D02C69922D789760095393F /* twaqi_master.xcdatamodeld in Sources */,
 				5D91523B22D1D231009EA4D7 /* aqiDetailVC.swift in Sources */,
+				5D02C69622D784D80095393F /* CoreDataStack.swift in Sources */,
 				5D91523522D11642009EA4D7 /* aqiData.swift in Sources */,
-				5D91523E22D225C3009EA4D7 /* twaqi_master.xcdatamodeld in Sources */,
 				5D91521E22D0FE81009EA4D7 /* AppDelegate.swift in Sources */,
 				5D91524022D23D63009EA4D7 /* aqiDetailCell.swift in Sources */,
 			);
@@ -364,12 +408,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		5D91523C22D225C3009EA4D7 /* twaqi_master.xcdatamodeld */ = {
+		5D02C69722D789760095393F /* twaqi_master.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				5D91523D22D225C3009EA4D7 /* twaqi_master.xcdatamodel */,
+				5D02C69822D789760095393F /* twaqi_master.xcdatamodel */,
 			);
-			currentVersion = 5D91523D22D225C3009EA4D7 /* twaqi_master.xcdatamodel */;
+			currentVersion = 5D02C69822D789760095393F /* twaqi_master.xcdatamodel */;
 			path = twaqi_master.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

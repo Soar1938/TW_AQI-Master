@@ -196,13 +196,11 @@
                                                     <color key="textColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KqI-aB-DZA">
-                                                    <rect key="frame" x="214" y="24" width="180" height="42"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KqI-aB-DZA">
+                                                    <rect key="frame" x="190" y="24" width="180" height="42"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="180" id="Gan-yH-1tJ"/>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="42" id="OHO-cM-4i9"/>
                                                         <constraint firstAttribute="height" constant="42" id="Uz7-vv-7Ew"/>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="lOK-5D-QpQ"/>
+                                                        <constraint firstAttribute="width" constant="180" id="lOK-5D-QpQ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                                     <color key="textColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

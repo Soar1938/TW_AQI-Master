@@ -13,10 +13,12 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var aqiData :[AQI]?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        CoreDataStack.sharedInstance.applicationDocumentsDirectory()
+        self.GetCompleteAQIData()
         return true
     }
 
@@ -41,48 +43,79 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveContext()
+        CoreDataStack.sharedInstance.saveContext()
     }
     
-    // MARK: - Core Data stack
-    lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
-        let container = NSPersistentContainer(name: "twaqi_master")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+    private func GetCompleteAQIData() {
+        if let url = URL(string: AQI_URL!) {
+            // print("RESPONSE url: \(url)")
+            let task = URLSession.shared.dataTask(with: url)
+            {(data, response, error) in
+                //print("RESPONSE FROM API: \(response)")
+                let decoder = JSONDecoder()
                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                if let data = data , let result = try? decoder.decode([AQI].self, from: data){
+                    print("RESPONSE FROM API: \(result)")
+                    self.aqiData = result
+                    DispatchQueue.main.async {
+                        let context = CoreDataStack.sharedInstance.persistentContainer.viewContext
+                        let aqi = NSEntityDescription.insertNewObject(forEntityName: "Aqi_List", into: context)as! Aqi_List
+                        //var ArrayCut: Int? = self.aqiData?.description.count
+                        if self.aqiData!.count != 0 {
+                            self.clearData()
+                            //新增資料
+                            for i in (0...self.aqiData!.count-1) {
+                                aqi.id = Int64(i)
+                                aqi.sitename = self.aqiData![i].SiteName!
+                                aqi.county = self.aqiData![i].County!
+                                aqi.aqi = (self.aqiData![i].AQI! as NSString).longLongValue
+                                aqi.pollutant = self.aqiData![i].Pollutant!
+                                aqi.status = self.aqiData![i].Status!
+                                aqi.so2 = (self.aqiData![i].SO2! as NSString).floatValue
+                                aqi.co = (self.aqiData![i].CO! as NSString).floatValue
+                                aqi.co_8hr = (self.aqiData![i].CO_8hr! as NSString).floatValue
+                                aqi.o3 = (self.aqiData![i].O3! as NSString).floatValue
+                                aqi.o3_8hr = (self.aqiData![i].O3_8hr! as NSString).floatValue
+                                aqi.pm10 = (self.aqiData![i].PM10! as NSString).floatValue
+                                aqi.pm25 = (self.aqiData![i].PM25! as NSString).floatValue
+                                aqi.no2 = (self.aqiData![i].NO2! as NSString).floatValue
+                                aqi.nox = (self.aqiData![i].NOx! as NSString).floatValue
+                                aqi.no = (self.aqiData![i].NO! as NSString).floatValue
+                                aqi.windspeed = (self.aqiData![i].WindSpeed! as NSString).floatValue
+                                aqi.winddirec = (self.aqiData![i].WindDirec! as NSString).floatValue
+                                aqi.publishtime = self.aqiData![i].PublishTime!
+                                aqi.pm25_avg = (self.aqiData![i].PM25_AVG! as NSString).floatValue
+                                aqi.pm10_avg = (self.aqiData![i].PM10_AVG! as NSString).floatValue
+                                aqi.so2_avg = (self.aqiData![i].SO2_AVG! as NSString).floatValue
+                                aqi.longitude = (self.aqiData![i].Longitude! as NSString).doubleValue
+                                aqi.latitude = (self.aqiData![i].Latitude! as NSString).doubleValue
+                                
+                                do {
+                                    try context.save()
+                                    print("儲存成功\(i)")
+                                }catch let error{
+                                    print("context can't save!, Error:\(error)")
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        })
-        return container
-    }()
+            task.resume()
+        }
+    }
     
-    // MARK: - Core Data Saving support
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
+    private func clearData() {
+        do {
+            
+            let context = CoreDataStack.sharedInstance.persistentContainer.viewContext
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: String(describing: Aqi_List.self))
             do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                let objects  = try context.fetch(fetchRequest) as? [NSManagedObject]
+                _ = objects.map{$0.map{context.delete($0)}}
+                CoreDataStack.sharedInstance.saveContext()
+            } catch let error {
+                print("ERROR DELETING : \(error)")
             }
         }
     }
