@@ -64,3 +64,29 @@ struct AQI: Codable {
         case Latitude = "Latitude"
     }
 }
+
+struct AQIDB: Codable {
+    var sitename:String?
+    var county:String?
+    var aqi:String?
+    var pollutant:String?
+    var status:String?
+    var so2:String?
+    var co:String?
+    var co_8hr:String?
+    var o3:String?
+    var o3_8hr:String?
+    var pm10:String?
+    var pm25:String?
+    var no2:String?
+    var nox:String?
+    var no:String?
+    var windspeed:String?
+    var winddirec:String?
+    var publishtime:String?
+    var pm25_avg:String?
+    var pm10_avg:String?
+    var so2_avg:String?
+    var longitude:String?
+    var latitude:String?
+}

@@ -11,6 +11,7 @@
 		5D02C69222D7835E0095393F /* Aqi_List+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C69022D7835E0095393F /* Aqi_List+CoreDataProperties.swift */; };
 		5D02C69622D784D80095393F /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C69522D784D80095393F /* CoreDataStack.swift */; };
 		5D02C69922D789760095393F /* twaqi_master.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D02C69722D789760095393F /* twaqi_master.xcdatamodeld */; };
+		5D4F7FAF22DA42D100F738EA /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4F7FAE22DA42D100F738EA /* PersistenceController.swift */; };
 		5D91521E22D0FE81009EA4D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91521D22D0FE81009EA4D7 /* AppDelegate.swift */; };
 		5D91522022D0FE81009EA4D7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91521F22D0FE81009EA4D7 /* ViewController.swift */; };
 		5D91522322D0FE81009EA4D7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D91522122D0FE81009EA4D7 /* Main.storyboard */; };
@@ -28,6 +29,7 @@
 		5D02C69022D7835E0095393F /* Aqi_List+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Aqi_List+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5D02C69522D784D80095393F /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		5D02C69822D789760095393F /* twaqi_master.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = twaqi_master.xcdatamodel; sourceTree = "<group>"; };
+		5D4F7FAE22DA42D100F738EA /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		5D91521A22D0FE81009EA4D7 /* twaqi-master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "twaqi-master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D91521D22D0FE81009EA4D7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D91521F22D0FE81009EA4D7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				5D02C68F22D7835E0095393F /* Aqi_List+CoreDataClass.swift */,
 				5D02C69022D7835E0095393F /* Aqi_List+CoreDataProperties.swift */,
 				5D02C69522D784D80095393F /* CoreDataStack.swift */,
+				5D4F7FAE22DA42D100F738EA /* PersistenceController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				5D91523322D1038F009EA4D7 /* aqiTableCell.swift in Sources */,
 				5D02C69122D7835E0095393F /* Aqi_List+CoreDataClass.swift in Sources */,
 				5D91522022D0FE81009EA4D7 /* ViewController.swift in Sources */,
+				5D4F7FAF22DA42D100F738EA /* PersistenceController.swift in Sources */,
 				5D02C69922D789760095393F /* twaqi_master.xcdatamodeld in Sources */,
 				5D91523B22D1D231009EA4D7 /* aqiDetailVC.swift in Sources */,
 				5D02C69622D784D80095393F /* CoreDataStack.swift in Sources */,

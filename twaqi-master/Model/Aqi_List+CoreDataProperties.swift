@@ -17,11 +17,10 @@ extension Aqi_List {
         return NSFetchRequest<Aqi_List>(entityName: "Aqi_List")
     }
 
-    @NSManaged public var aqi: Int64
+    @NSManaged public var aqi: Int32
     @NSManaged public var co: Float
     @NSManaged public var co_8hr: Float
     @NSManaged public var county: String?
-    @NSManaged public var id: Int64
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var no: Float

@@ -12,8 +12,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var aqiTableView: UITableView!
     @IBOutlet weak var sentenceTxtView: UITextView!
-    
-    var aqiArray :[AQI]?
+    private var persistenceController: PersistenceController?
+    //var aqiArray :[AQI]?
+    var aqiAy : [Aqi_List]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,12 +23,12 @@ class ViewController: UIViewController {
         aqiTableView.dataSource = self
         aqiTableView.delegate = self
         
-        //refreshControl = UIRefreshControl()
-        //refreshControl.addTarget(self, action: #selector(updateData), for: UIControl.Event.valueChanged)
-        //aqiTabelView.addSubview(refreshControl)
         
         //MARK: - fetch data in the first time
-        getData()
+        persistenceController = PersistenceController { [weak self] in
+            self?.getData()
+        }
+        
     }
 }
 
@@ -35,32 +36,38 @@ class ViewController: UIViewController {
 extension ViewController {
     
     func getData() {
+        self.aqiAy =  self.persistenceController?.Aqi()
+        self.aqiTableView.reloadData()
         if let url = URL(string: AQI_URL!) {
-            print("RESPONSE url: \(url)")
             let task = URLSession.shared.dataTask(with: url)
             {(data, response, error) in
-                //print("RESPONSE FROM API: \(response)")
                 let decoder = JSONDecoder()
                 
                 if let data = data , let result = try? decoder.decode([AQI].self, from: data){
-                    print("RESPONSE FROM API: \(result)")
-                    self.aqiArray = result
                     DispatchQueue.main.async {
+                        print("result count: \(result.count)")
+                        if result.count > 0 {
+                            if result[0].PublishTime != self.aqiAy![0].publishtime {
+                                self.persistenceController?.Aqi().forEach { Aqi_Del in
+                                    print("Delete Aqi: \(Aqi_Del.sitename!) ： \(Aqi_Del.county!)")
+                                    self.persistenceController?.delete(Aqi_Del) { [weak self] in
+                                        print("Number of authors after delete: \(String(describing: self?.persistenceController?.Aqi().count))")
+                                    }
+                                }
+                                for aqi in result {
+                                    print("SiteName: \(aqi.SiteName!)")
+                                    self.persistenceController?.createAqi(with: aqi)
+                                }
+                            }
+                        }
+                        print("Aqi Count: \(self.persistenceController?.Aqi().count as Int?)")
+                        self.aqiAy?.removeAll()
+                        self.aqiAy =  self.persistenceController?.Aqi()
                         self.aqiTableView.reloadData()
                     }
                 }
             }
             task.resume()
-        }
-    }
-    
-    @objc func updateData() {
-        
-        DispatchQueue.main.async {
-            self.getData()
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1){
-                //self.refreshControl.endRefreshing()
-            }
         }
     }
 }
@@ -70,31 +77,28 @@ extension ViewController: UITableViewDataSource,UITableViewDelegate{
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if aqiArray != nil {
-            return self.aqiArray!.count
-        }else{
-            return 1
-        }
+        //let count: Int! = self.persistenceController?.Aqi().count ?? 1
+        //let count: Int! = self.aqiArray?.count ?? 1
+        let count: Int! = self.aqiAy?.count ?? 1
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "aqiCell", for: indexPath) as! aqiTableCell
-        if aqiArray != nil {
+        
+        cell.selectionStyle = .none
+        if self.aqiAy != nil {
             
-            aqiArray?.reverse()
-            cell.cityName.text = aqiArray![indexPath.row].SiteName!
-            cell.aqiValue.text = aqiArray![indexPath.row].AQI!
+            // self.aqiAy?.reverse()
+            cell.cityName.text = self.aqiAy![indexPath.row].sitename!
+            cell.aqiValue.text = String(self.aqiAy![indexPath.row].aqi)
             if cell.aqiValue.text == ""{
                 cell.aqiValue.text = "暫無資料"
             }
-            let aqi:Int = Int(aqiArray![indexPath.row].AQI!) ?? -1
+            let aqi:Int = Int(self.aqiAy![indexPath.row].aqi)
             cell.aqiCellView.backgroundColor = backgroundColor(aqiIndex: aqi)
             return cell
         }else{
-            
-            //let errorCell = tableView.dequeueReusableCell(withIdentifier: "errorCell", for: indexPath)
-            
-            //return errorCell
             cell.cityName.text = ""
             cell.aqiValue.text = ""
             if cell.aqiValue.text == ""{
@@ -109,44 +113,45 @@ extension ViewController: UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if aqiArray != nil {
-            // aqiArray![indexPath.row].SiteName!
-            //performSegue(withIdentifier: "showDetail", sender: self)
+        if self.aqiAy == nil {
+            return
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        
+        let deleteAction = UITableViewRowAction(style: .default, title: "刪除") {
             
+            action, index in
+            self.aqiAy!.remove(at: index.row)
+            self.aqiTableView.reloadData()
+        }
+        
+        self.persistenceController?.delete(self.aqiAy![indexPath.row]) { [weak self] in
+            print("Number of authors after delete: \(String(describing: self?.persistenceController?.Aqi().count))")
+        }
+        
+        return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if tableView.isEditing {
+            return .none
+        } else {
+            return .delete
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //if segue.identifier=="showDetail" {
-            if let indexPath = aqiTableView.indexPathForSelectedRow {
-                let eng = segue.destination as! aqiDetailVC
-                
-                eng.SiteName = aqiArray![indexPath.row].SiteName!
-                eng.County = aqiArray![indexPath.row].County!
-                eng.AQI = aqiArray![indexPath.row].AQI!
-                eng.Pollutant = aqiArray![indexPath.row].Pollutant!
-                eng.Status = aqiArray![indexPath.row].Status!
-                eng.SO2 = aqiArray![indexPath.row].SO2!
-                eng.CO = aqiArray![indexPath.row].CO!
-                eng.CO_8hr = aqiArray![indexPath.row].CO_8hr!
-                eng.O3 = aqiArray![indexPath.row].O3!
-                eng.O3_8hr = aqiArray![indexPath.row].O3_8hr!
-                eng.PM10 = aqiArray![indexPath.row].PM10!
-                eng.PM25 = aqiArray![indexPath.row].PM25!
-                eng.NO2 = aqiArray![indexPath.row].NO2!
-                eng.NOx = aqiArray![indexPath.row].NOx!
-                eng.NO = aqiArray![indexPath.row].NO!
-                eng.WindSpeed = aqiArray![indexPath.row].WindSpeed!
-                eng.WindDirec = aqiArray![indexPath.row].WindDirec!
-                eng.PublishTime = aqiArray![indexPath.row].PublishTime!
-                eng.PM25_AVG = aqiArray![indexPath.row].PM25_AVG!
-                eng.PM10_AVG = aqiArray![indexPath.row].PM10_AVG!
-                eng.SO2_AVG = aqiArray![indexPath.row].SO2_AVG!
-                eng.Longitude = aqiArray![indexPath.row].Longitude!
-                eng.Latitude = aqiArray![indexPath.row].Latitude!
-                
-            }
-        //2giijdli}
+
+        if let indexPath = aqiTableView.indexPathForSelectedRow {
+            let eng = segue.destination as! aqiDetailVC
+            
+            eng.aqiData     = self.aqiAy!
+            eng.indexRow    = indexPath.row
+
+        }
     }
 }
 
@@ -154,7 +159,7 @@ extension ViewController: UITableViewDataSource,UITableViewDelegate{
 extension ViewController {
     
     func backgroundColor(aqiIndex: Int) -> UIColor {
-        if aqiIndex >= 0 && aqiIndex <= 50 {
+        if aqiIndex > 0 && aqiIndex <= 50 {
             return UIColor.init(displayP3Red: 0/255, green: 232/255, blue: 0/255, alpha: 1.0)
         }else if aqiIndex > 50  && aqiIndex <= 100{
             return UIColor.init(displayP3Red: 255/255, green: 255/255, blue: 0/255, alpha: 1.0)
@@ -166,7 +171,7 @@ extension ViewController {
             return UIColor.init(displayP3Red: 143/255, green: 63/255, blue: 151/255, alpha: 1.0)
         }else if aqiIndex > 300 {
             return UIColor.init(displayP3Red: 125/255, green: 0/255, blue: 35/255, alpha: 1.0)
-        }else if aqiIndex == -1 {
+        }else if aqiIndex == 0 {
             return UIColor.init(displayP3Red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         }else {
             return UIColor.init(displayP3Red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)

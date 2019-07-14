@@ -13,12 +13,13 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var aqiData :[AQI]?
+    private var persistenceController: PersistenceController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        CoreDataStack.sharedInstance.applicationDocumentsDirectory()
-        self.GetCompleteAQIData()
+        /*persistenceController = PersistenceController { [weak self] in
+            self?.GetCompleteAQIData()
+        }*/
         return true
     }
 
@@ -43,81 +44,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        CoreDataStack.sharedInstance.saveContext()
+        persistenceController?.save()
     }
     
     private func GetCompleteAQIData() {
-        if let url = URL(string: AQI_URL!) {
-            // print("RESPONSE url: \(url)")
+        /*if let url = URL(string: AQI_URL!) {
             let task = URLSession.shared.dataTask(with: url)
             {(data, response, error) in
-                //print("RESPONSE FROM API: \(response)")
                 let decoder = JSONDecoder()
-                
-                if let data = data , let result = try? decoder.decode([AQI].self, from: data){
-                    print("RESPONSE FROM API: \(result)")
-                    self.aqiData = result
+                if let data = data , let result = try? decoder.decode([AQI].self , from: data){
                     DispatchQueue.main.async {
-                        let context = CoreDataStack.sharedInstance.persistentContainer.viewContext
-                        let aqi = NSEntityDescription.insertNewObject(forEntityName: "Aqi_List", into: context)as! Aqi_List
-                        //var ArrayCut: Int? = self.aqiData?.description.count
-                        if self.aqiData!.count != 0 {
-                            self.clearData()
-                            //新增資料
-                            for i in (0...self.aqiData!.count-1) {
-                                aqi.id = Int64(i)
-                                aqi.sitename = self.aqiData![i].SiteName!
-                                aqi.county = self.aqiData![i].County!
-                                aqi.aqi = (self.aqiData![i].AQI! as NSString).longLongValue
-                                aqi.pollutant = self.aqiData![i].Pollutant!
-                                aqi.status = self.aqiData![i].Status!
-                                aqi.so2 = (self.aqiData![i].SO2! as NSString).floatValue
-                                aqi.co = (self.aqiData![i].CO! as NSString).floatValue
-                                aqi.co_8hr = (self.aqiData![i].CO_8hr! as NSString).floatValue
-                                aqi.o3 = (self.aqiData![i].O3! as NSString).floatValue
-                                aqi.o3_8hr = (self.aqiData![i].O3_8hr! as NSString).floatValue
-                                aqi.pm10 = (self.aqiData![i].PM10! as NSString).floatValue
-                                aqi.pm25 = (self.aqiData![i].PM25! as NSString).floatValue
-                                aqi.no2 = (self.aqiData![i].NO2! as NSString).floatValue
-                                aqi.nox = (self.aqiData![i].NOx! as NSString).floatValue
-                                aqi.no = (self.aqiData![i].NO! as NSString).floatValue
-                                aqi.windspeed = (self.aqiData![i].WindSpeed! as NSString).floatValue
-                                aqi.winddirec = (self.aqiData![i].WindDirec! as NSString).floatValue
-                                aqi.publishtime = self.aqiData![i].PublishTime!
-                                aqi.pm25_avg = (self.aqiData![i].PM25_AVG! as NSString).floatValue
-                                aqi.pm10_avg = (self.aqiData![i].PM10_AVG! as NSString).floatValue
-                                aqi.so2_avg = (self.aqiData![i].SO2_AVG! as NSString).floatValue
-                                aqi.longitude = (self.aqiData![i].Longitude! as NSString).doubleValue
-                                aqi.latitude = (self.aqiData![i].Latitude! as NSString).doubleValue
-                                
-                                do {
-                                    try context.save()
-                                    print("儲存成功\(i)")
-                                }catch let error{
-                                    print("context can't save!, Error:\(error)")
+                        if result.count != 0 {
+                            self.persistenceController?.Aqi().forEach { Aqi_Del in
+                                print("Delete Aqi: \(Aqi_Del.sitename!) ： \(Aqi_Del.county!)")
+                                self.persistenceController?.delete(Aqi_Del) { [weak self] in
+                                    print("Number of authors after delete: \(String(describing: self?.persistenceController?.Aqi().count))")
                                 }
                             }
+                            for aqi in result {
+                                print("SiteName: \(aqi.SiteName!)")
+                                self.persistenceController?.createAqi(with: aqi)
+                            }
                         }
+                        print("Aqi Count: \(self.persistenceController?.Aqi().count as Int?)")
                     }
                 }
             }
             task.resume()
-        }
-    }
-    
-    private func clearData() {
-        do {
-            
-            let context = CoreDataStack.sharedInstance.persistentContainer.viewContext
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: String(describing: Aqi_List.self))
-            do {
-                let objects  = try context.fetch(fetchRequest) as? [NSManagedObject]
-                _ = objects.map{$0.map{context.delete($0)}}
-                CoreDataStack.sharedInstance.saveContext()
-            } catch let error {
-                print("ERROR DELETING : \(error)")
-            }
-        }
+        }*/
     }
 }
 
