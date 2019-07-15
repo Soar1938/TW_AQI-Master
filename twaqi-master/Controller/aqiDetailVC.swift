@@ -15,41 +15,18 @@ class aqiDetailVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     var aqi:Int?
     var bgColor : UIColor?
     var txtColor : UIColor?
-    /*
-    var SiteName:String!
-    var County:String!
-    var AQI:String!
-    var Pollutant:String!
-    var Status:String!
-    var SO2:String!
-    var CO:String!
-    var CO_8hr:String!
-    var O3:String!
-    var O3_8hr:String!
-    var PM10:String!
-    var PM25:String!
-    var NO2:String!
-    var NOx:String!
-    var NO:String!
-    var WindSpeed:String!
-    var WindDirec:String!
-    var PublishTime:String!
-    var PM25_AVG:String!
-    var PM10_AVG:String!
-    var SO2_AVG:String!
-    var Longitude:String!
-    var Latitude:String!
-    */
     
+    @IBOutlet weak var dailyTxtLable: UILabel!
     @IBOutlet weak var aqiDetailTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.aqi = Int(self.aqiData![indexRow!].aqi) //?? -1
-        
         self.bgColor = backgroundColor(aqiVal: self.aqi!)
         self.txtColor = LableTxtColor(aqiVal: self.aqi!)
         aqiDetailTableView.backgroundColor = self.bgColor
+        
+        self.getDailyData()
         // Do any additional setup after loading the view.
     }
     
@@ -130,6 +107,33 @@ class aqiDetailVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     }
     */
 
+}
+
+//MARK: - Fetch Daily Json Data
+extension aqiDetailVC {
+    
+    func getDailyData() {
+        
+        if let url = URL(string: dailyURL!) {
+            let task = URLSession.shared.dataTask(with: url)
+            {(data, response, error) in
+                let decoder = JSONDecoder()
+                //print("data Txt: \(data!)")
+                print("跑這裡1")
+                if let data = data , let DailyResult = try? decoder.decode([Daily].self, from: data) {
+                    print("跑這裡2")
+                    print("result = \(DailyResult)")
+                    DispatchQueue.main.async {
+                        print("result Txt: \(DailyResult[0].Txt!)\n\n\(DailyResult[0].Title!)   \(DailyResult[0].Time!)")
+                        self.dailyTxtLable.text = DailyResult[0].Txt!+"\n\n"+DailyResult[0].Title!+"   "+DailyResult[0].Time!
+                        self.dailyTxtLable.textColor = UIColor.init(displayP3Red: 0/255, green: 0/255, blue: 245/255, alpha: 1.0)
+                        self.dailyTxtLable.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
 }
 
 //MARK: - methods

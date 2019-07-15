@@ -105,7 +105,7 @@ final class PersistenceController: NSObject {
             managedObjectContext.processPendingChanges()
             do {
                 try managedObjectContext.save()
-                print("Write finished (main moc)")
+                //print("Write finished (main moc)")
             } catch {
                 fatalError("Error saving (main moc).")
             }
@@ -114,7 +114,7 @@ final class PersistenceController: NSObject {
                 do {
                     try privateContext.save()
                     privateContext.processPendingChanges()
-                    print("Write finished (private moc)")
+                    //print("Write finished (private moc)")
                     completion?()
                 } catch {
                     fatalError("Error saving (private moc).")

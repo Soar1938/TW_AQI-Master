@@ -1,12 +1,12 @@
 <?PHP
-set_time_limit(0); 
 header("Content-Type:text/html; charset=utf-8");
-date_default_timezone_set("Asia/Taipei");
+#date_default_timezone_set("Asia/Taipei");
 
 //	http://localhost/dailyquote_xpath.php
 
 $htmlStr = "https://tw.appledaily.com/index/dailyquote/";
 $url_page = file_get_contents($htmlStr);
+$url_page = mb_convert_encoding($url_page, 'html-entities', 'utf-8');  //轉編碼
 
 
 $dom = new DOMDocument();
@@ -22,18 +22,18 @@ $Data = array();
 
 foreach ($nodeTxt as $a){
 	$Txt = trim($a->nodeValue);
-	$Data["txt"] = $Txt;	
+	$Data[0]["Txt"] = $Txt;
 }
 
 foreach ($nodeH1 as $b){
 	$Title = trim($b->nodeValue);
-	$Data["Title"] = $Title;	
+	$Data[0]["Title"] = $Title;
 }
 
 foreach ($nodeTime as $c){
 	$Time = trim($c->nodeValue);
-	$Data["Time"] = $Time;	
+	$Data[0]["Time"] = $Time;
 }
 
-print json_encode($Data);
+print json_encode($Data, JSON_UNESCAPED_UNICODE);
 ?>
