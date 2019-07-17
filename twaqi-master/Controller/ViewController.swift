@@ -24,8 +24,7 @@ class ViewController: UIViewController {
         
         aqiTableView.dataSource = self
         aqiTableView.delegate = self
-        
-        
+    
         //MARK: - fetch data in the first time
         persistenceController = PersistenceController { [weak self] in
             self?.getData()
