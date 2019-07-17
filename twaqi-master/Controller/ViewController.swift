@@ -37,6 +37,7 @@ extension ViewController {
     
     func getData() {
         self.aqiAy =  self.persistenceController?.Aqi()
+        let aqi_count: Int! = self.aqiAy?.count ?? 0
         self.aqiTableView.reloadData()
         if let url = URL(string: AQI_URL!) {
             let task = URLSession.shared.dataTask(with: url)
@@ -47,13 +48,20 @@ extension ViewController {
                     DispatchQueue.main.async {
                         print("result count: \(result.count)")
                         if result.count > 0 {
-                            if result[0].PublishTime != self.aqiAy![0].publishtime {
-                                self.persistenceController?.Aqi().forEach { Aqi_Del in
-                                    print("Delete Aqi: \(Aqi_Del.sitename!) ： \(Aqi_Del.county!)")
-                                    self.persistenceController?.delete(Aqi_Del) { [weak self] in
-                                        print("Number of authors after delete: \(String(describing: self?.persistenceController?.Aqi().count))")
+                            if aqi_count > 0 {
+                                if result[0].PublishTime != self.aqiAy![0].publishtime  {
+                                    self.persistenceController?.Aqi().forEach { Aqi_Del in
+                                        print("Delete Aqi: \(Aqi_Del.sitename!) ： \(Aqi_Del.county!)")
+                                        self.persistenceController?.delete(Aqi_Del) { [weak self] in
+                                            print("Number of authors after delete: \(String(describing: self?.persistenceController?.Aqi().count))")
+                                        }
+                                    }
+                                    for aqi in result {
+                                        print("SiteName: \(aqi.SiteName!)")
+                                        self.persistenceController?.createAqi(with: aqi)
                                     }
                                 }
+                            } else {
                                 for aqi in result {
                                     print("SiteName: \(aqi.SiteName!)")
                                     self.persistenceController?.createAqi(with: aqi)
