@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var aqiTableView: UITableView!
     @IBOutlet weak var sentenceTxtView: UITextView!
     private var persistenceController: PersistenceController?
+    // 創建一個列隊組合
+    private let group = DispatchGroup()
     //var aqiArray :[AQI]?
     var aqiAy : [Aqi_List]?
     
@@ -45,7 +47,7 @@ extension ViewController {
                 let decoder = JSONDecoder()
                 
                 if let data = data , let result = try? decoder.decode([AQI].self, from: data){
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.sync {
                         print("result count: \(result.count)")
                         if result.count > 0 {
                             if aqi_count > 0 {
@@ -72,6 +74,8 @@ extension ViewController {
                         self.aqiAy?.removeAll()
                         self.aqiAy =  self.persistenceController?.Aqi()
                         self.aqiTableView.reloadData()
+                        
+
                     }
                 }
             }
@@ -152,13 +156,16 @@ extension ViewController: UITableViewDataSource,UITableViewDelegate{
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if let indexPath = aqiTableView.indexPathForSelectedRow {
-            let eng = segue.destination as! aqiDetailVC
-            
-            eng.aqiData     = self.aqiAy!
-            eng.indexRow    = indexPath.row
-
+        
+        if self.aqiAy != nil {
+            if let indexPath = self.aqiTableView.indexPathForSelectedRow {
+                print("indexPath Row = \(indexPath.row)")
+                let eng = segue.destination as! aqiDetailVC
+                
+                eng.aqiData     = self.aqiAy!
+                eng.indexRow    = indexPath.row
+                
+            }
         }
     }
 }

@@ -30,6 +30,17 @@ class aqiDetailVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if animated {
+            self.aqi = Int(self.aqiData![indexRow!].aqi) //?? -1
+            self.bgColor = backgroundColor(aqiVal: self.aqi!)
+            self.txtColor = LableTxtColor(aqiVal: self.aqi!)
+            aqiDetailTableView.backgroundColor = self.bgColor
+            self.aqiDetailTableView.reloadData()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
@@ -39,6 +50,7 @@ class aqiDetailVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
         
         cell.selectionStyle = .none
         cell.backgroundColor = self.bgColor
+        cell.AqiInfoCellView.backgroundColor = self.bgColor
         cell.TitleLabel.text = ""
         cell.ValueLabel.text = ""
         cell.TitleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 24)

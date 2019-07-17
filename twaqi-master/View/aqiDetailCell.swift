@@ -12,6 +12,7 @@ class aqiDetailCell: UITableViewCell {
 
     @IBOutlet weak var TitleLabel: UILabel!
     @IBOutlet weak var ValueLabel: UILabel!
+    @IBOutlet weak var AqiInfoCellView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
